@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFC Clock</string>
+    <string name="text_repeat">Répéter</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="txt_vibrate">Vibreur</string>
+    <string name="label_hint">Libellé</string>
+</resources>
