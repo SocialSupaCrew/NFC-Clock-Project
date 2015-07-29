@@ -1,52 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:columnCount="2"
+    android:rowCount="6">
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/time"/>
+        android:layout_row="0"
+        android:layout_column="0"
+        android:id="@+id/time"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <Switch
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="1"
         android:id="@+id/active"/>
 
     <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/repeat"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/text_repeat"
-        android:text="@string/text_repeat"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:id="@+id/repeat"
+        android:text="@string/text_repeat"
+        android:textColor="@android:color/white"/>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="2"
+        android:layout_column="0"
         android:id="@+id/btn_ringtone"
         android:drawableLeft="@drawable/ic_ringtone"
-        android:drawableStart="@drawable/ic_ringtone"/>
+        android:drawableStart="@drawable/ic_ringtone"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/vibrate"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/txt_vibrate"
-        android:text="@string/txt_vibrate"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="2"
+        android:layout_column="1"
+        android:id="@+id/vibrate"
+        android:text="@string/txt_vibrate"
+        android:textColor="@android:color/white"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_columnSpan="2">
 
         <EditText
             android:layout_width="match_parent"
@@ -55,4 +64,24 @@
             android:hint="@string/label_hint"/>
     </android.support.design.widget.TextInputLayout>
 
-</LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="4"
+        android:layout_column="0"
+        android:id="@+id/btn_delete"
+        android:drawableStart="@drawable/ic_delete"
+        android:drawableLeft="@drawable/ic_delete"
+        style="?android:attr/borderlessButtonStyle"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="4"
+        android:layout_column="1"
+        android:id="@+id/btn_expend"
+        android:drawableStart="@drawable/ic_expand"
+        android:drawableLeft="@drawable/ic_expand"
+        style="?android:attr/borderlessButtonStyle"/>
+
+</GridLayout>
