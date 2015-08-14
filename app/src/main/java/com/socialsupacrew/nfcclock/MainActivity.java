@@ -31,6 +31,13 @@ public class MainActivity extends ActionBarActivity {
                 adapter.addAlarm(adapter.getItemCount(), new Alarm("35:15", true, false, "reivbd", false, ""));
             }
         });
+
+        /*findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v){
+                int position = alarms.get()
+                adapter.removeItem(position);
+            }
+        });*/
     }
 
     private ArrayList<Alarm> getAlarm() {
