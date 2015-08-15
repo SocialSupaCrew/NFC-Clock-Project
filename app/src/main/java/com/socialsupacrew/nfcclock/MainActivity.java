@@ -1,5 +1,7 @@
 package com.socialsupacrew.nfcclock;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         final RecyclerView rvAlarms = (RecyclerView) findViewById(R.id.rvAlarms);
+        rvAlarms.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
         final AlarmRecycleViewAdapter adapter = new AlarmRecycleViewAdapter(this, getAlarm());
         rvAlarms.setAdapter(adapter);
         rvAlarms.setLayoutManager(new LinearLayoutManager(this));
