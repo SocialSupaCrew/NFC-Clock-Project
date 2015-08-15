@@ -25,7 +25,6 @@ public class AlarmRecycleViewAdapter extends RecyclerView.Adapter<AlarmRecycleVi
     private ArrayList<Alarm> alarms;
     private Context context;
     private int expandedPosition = -1;
-    private int toCollapse = 0;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -173,6 +172,8 @@ public class AlarmRecycleViewAdapter extends RecyclerView.Adapter<AlarmRecycleVi
     public void removeItem(int position) {
         alarms.remove(position);
         this.notifyItemRemoved(position);
+        expandedPosition = -1;
+        notifyItemChanged(expandedPosition);
     }
 
     @Override
