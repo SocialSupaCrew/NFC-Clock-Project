@@ -7,12 +7,20 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * Created by SocialSupaCrew on 19/08/2015.
  */
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class TimePickerNewAlarm extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+    SimpleCursorRecyclerAdapter mCursorAdapter;
+
+    public TimePickerNewAlarm(SimpleCursorRecyclerAdapter adapter) {
+        mCursorAdapter = adapter;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Get the current time as default value
@@ -24,6 +32,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
+        String time = String.format("%02d:%02d", hourOfDay, minute);
+//        System.out.println("time : ");
+//        System.out.println(mAlarms.get(mAlarms.size()-1).id);
+        mCursorAdapter.addAlarm(time);
     }
 }

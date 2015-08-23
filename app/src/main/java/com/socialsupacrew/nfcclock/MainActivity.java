@@ -1,23 +1,21 @@
 package com.socialsupacrew.nfcclock;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridLayout;
-import android.widget.SimpleCursorAdapter;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Alarm> alarms = new ArrayList<>();
     AlarmDBHelper dbHelper;
@@ -26,10 +24,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         dbHelper = new AlarmDBHelper(this);
 
-        final Cursor cursor = dbHelper.getAlarms();
+        final Cursor cursor = dbHelper.getCursorAlarms();
         String [] columns = new String[] {
                 AlarmDBHelper.ID,
                 AlarmDBHelper.TIME,
@@ -40,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
                 AlarmDBHelper.LABEL
         };
         int [] widgets = new int[] {
+                R.id.id_alarm,
                 R.id.time,
                 R.id.active,
                 R.id.repeat,
@@ -48,11 +46,10 @@ public class MainActivity extends ActionBarActivity {
                 R.id.label
         };
 
-        SimpleCursorRecyclerAdapter cursorAdapter = new SimpleCursorRecyclerAdapter(R.layout.item_alarm, cursor, columns, widgets);
-
+        final SimpleCursorRecyclerAdapter cursorAdapter = new SimpleCursorRecyclerAdapter(R.layout.item_alarm, cursor, columns, widgets, this);
         final RecyclerView rvAlarms = (RecyclerView) findViewById(R.id.rvAlarms);
         rvAlarms.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
-        final AlarmRecycleViewAdapter adapter = new AlarmRecycleViewAdapter(this, getAlarm());
+//        final AlarmRecycleViewAdapter adapter = new AlarmRecycleViewAdapter(this, getAlarm());
         rvAlarms.setAdapter(cursorAdapter);
         rvAlarms.setLayoutManager(new LinearLayoutManager(this));
 
@@ -61,18 +58,11 @@ public class MainActivity extends ActionBarActivity {
         findViewById(R.id.fab_alarm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
-                newFragment.show(getFragmentManager(), "timePicker");
+                DialogFragment dialogFragment = new TimePickerNewAlarm(cursorAdapter);
+                dialogFragment.show(getFragmentManager(), "timePicker");
 //                adapter.addAlarm(adapter.getItemCount(), new Alarm(1, "35:15", true, false, "reivbd", false, ""));
             }
         });
-
-        /*findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v){
-                int position = alarms.get()
-                adapter.removeItem(position);
-            }
-        });*/
     }
 
     private ArrayList<Alarm> getAlarm() {

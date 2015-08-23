@@ -1,9 +1,8 @@
+package com.socialsupacrew.nfcclock;
 /*
  * The MIT License (MIT)
  *
  * Copyright (c) 2015 ARNAUD FRUGIER
- *
- * http://quanturium.github.io/2015/04/19/using-cursors-with-the-new-recyclerview/
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package com.socialsupacrew.nfcclock;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -56,10 +53,10 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
 
-        onBindViewHolder(holder, mCursor);
+        onBindViewHolder(holder, mCursor, position);
     }
 
-    public abstract void onBindViewHolder(VH holder, Cursor cursor);
+    public abstract void onBindViewHolder(VH holder, Cursor cursor, int position);
 
     public Cursor getCursor() {
         return mCursor;

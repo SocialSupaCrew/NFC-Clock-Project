@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by SocialSupaCrew on 15/08/2015.
  */
 public class AlarmDBHelper extends SQLiteOpenHelper {
     public final static String DB_NAME = "database.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public static final String TABLE_NAME = "Alarm";
 
@@ -50,7 +52,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertAlart(Alarm a) {
+    public boolean insertAlarm(Alarm a) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TIME, a.time);
@@ -76,10 +78,31 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public Cursor getAlarms() {
+    public Cursor getCursorAlarms() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        return res;
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
+
+    public ArrayList<Alarm> getAlarms() {
+        ArrayList<Alarm> alarms = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+
+        while (c.moveToNext()) {
+            int id = c.getInt(c.getColumnIndex(ID));
+            String time = c.getString(c.getColumnIndex(TIME));
+            boolean active = c.getInt(c.getColumnIndex(ACTIVE)) == 1;
+            boolean repeat = c.getInt(c.getColumnIndex(REPEAT)) == 1;
+            String ringtone = c.getString(c.getColumnIndex(RINGTONE));
+            boolean vibrate = c.getInt(c.getColumnIndex(VIBRATE)) == 1;
+            String label = c.getString(c.getColumnIndex(LABEL));
+
+            alarms.add(new Alarm(id, time, active, repeat, ringtone, vibrate, label));
+        }
+
+        c.close();
+
+        return alarms;
     }
 
     public Integer deleteAlarm(Integer id) {

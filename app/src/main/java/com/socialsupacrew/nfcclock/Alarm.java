@@ -26,7 +26,7 @@ public class Alarm {
         this.ringtone = ringtone;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
