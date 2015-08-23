@@ -28,6 +28,7 @@ package com.socialsupacrew.nfcclock;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
 
     private ArrayList<Alarm> alarms;
     private Context context;
+    private Activity activity;
     private int position;
     private int expandedPosition = -1;
 
@@ -60,6 +62,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     public SimpleCursorRecyclerAdapter (int layout, Cursor c, String[] from, int[] to, Context context) {
         super(c);
         this.context = context;
+        activity = (Activity) context;
         mLayout = layout;
         mTo = to;
         mOriginalFrom = from;
@@ -99,6 +102,21 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         holder.btCollapse.setOnClickListener(new collapseOnClickListener(-1));
 
         holder.btDelete.setOnClickListener(new deleteOnClickListener(expandedPosition, Integer.parseInt(holder.tvId.getText().toString())));
+
+        holder.tvTime.setOnClickListener(
+                new changeTimeOnClickListener(
+                        this,
+                        position,
+                        new Alarm(
+                                Integer.parseInt(holder.tvId.getText().toString()),
+                                holder.tvTime.getText().toString(),
+                                holder.sActive.isChecked(),
+                                holder.cbRepeat.isChecked(),
+                                holder.btRingtone.getText().toString(),
+                                holder.cbVibrate.isChecked(),
+                                holder.etLabel.getText().toString()
+                        )
+                ));
 
         System.out.println("position = " + position);
         System.out.println("expandedPosition = "+ expandedPosition);
@@ -173,6 +191,24 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         }
     }
 
+    public class changeTimeOnClickListener implements View.OnClickListener {
+        SimpleCursorRecyclerAdapter simpleCursorRecyclerAdapter;
+        int position;
+        Alarm alarm;
+
+        public changeTimeOnClickListener(SimpleCursorRecyclerAdapter simpleCursorRecyclerAdapter, int position, Alarm alarm) {
+            this.simpleCursorRecyclerAdapter = simpleCursorRecyclerAdapter;
+            this.position = position;
+            this.alarm = alarm;
+        }
+
+        @Override
+        public void onClick(View v) {
+            DialogFragment dialogFragment = new TimePickerUpdateAlarm(simpleCursorRecyclerAdapter, position, alarm);
+            dialogFragment.show(activity.getFragmentManager(), "timePicker");
+        }
+    }
+
     @Override
     public int getItemCount() {
         return alarms.size();
@@ -195,6 +231,14 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         this.notifyItemRemoved(position);
         expandedPosition = -1;
         this.notifyItemChanged(expandedPosition);
+    }
+
+    public void updateAlarm(Alarm alarm, int position) {
+        dbHelper.updateAlarm(alarm);
+        Alarm a = alarms.get(position);
+        a.setTime(alarm.time);
+        this.changeCursor(dbHelper.getCursorAlarms());
+        this.notifyItemChanged(position);
     }
 
     @Override
