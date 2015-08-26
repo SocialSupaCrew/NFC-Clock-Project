@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
             String txt_btn_rintone = RingtoneManager.getRingtone(getApplicationContext(), uri).getTitle(getApplicationContext());
             String ringtoneUri = uri.toString();
-            Alarm a = new Alarm(0, "8:30", false, false, ringtoneUri, txt_btn_rintone, false, "");
+            Alarm a = new Alarm(0, "08:30", false, false, ringtoneUri, txt_btn_rintone, false, "");
             alarms.add(cursorAdapter.getItemCount(), a);
             dbHelper.insertAlarm(a);
             cursorAdapter.changeCursor(dbHelper.getCursorAlarms());
