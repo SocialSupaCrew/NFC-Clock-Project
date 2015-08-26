@@ -27,10 +27,13 @@
 package com.socialsupacrew.nfcclock;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +59,8 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     private Activity activity;
     private int position;
     private int expandedPosition = -1;
+    Alarm mSelectedAlarm;
+    int mSelectedPosition;
 
     private AlarmDBHelper dbHelper;
 
@@ -94,9 +99,10 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         holder.tvTime.setText(alarm.time);
         holder.sActive.setChecked(alarm.active);
         holder.cbRepeat.setChecked(alarm.repeat);
-        holder.btRingtone.setText(alarm.ringtone);
+        holder.tvRingtone.setText(alarm.ringtoneTitle);
+        holder.tvRingtoneUri.setText(alarm.ringtoneUri);
         holder.cbVibrate.setChecked(alarm.vibrate);
-        holder.etLabel.setText(alarm.label);
+        holder.tvLabel.setText(alarm.label);
 
         holder.btExpand.setOnClickListener(new expandOnClickListener(holder.getAdapterPosition()));
         holder.btCollapse.setOnClickListener(new collapseOnClickListener(-1));
@@ -112,11 +118,26 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
                                 holder.tvTime.getText().toString(),
                                 holder.sActive.isChecked(),
                                 holder.cbRepeat.isChecked(),
-                                holder.btRingtone.getText().toString(),
+                                holder.tvRingtone.getText().toString(),
+                                holder.tvRingtoneUri.getText().toString(),
                                 holder.cbVibrate.isChecked(),
-                                holder.etLabel.getText().toString()
+                                holder.tvLabel.getText().toString()
                         )
                 ));
+
+        holder.tvRingtone.setOnClickListener(new ringtoneOnClickListener(
+                new Alarm(
+                        Integer.parseInt(holder.tvId.getText().toString()),
+                        holder.tvTime.getText().toString(),
+                        holder.sActive.isChecked(),
+                        holder.cbRepeat.isChecked(),
+                        holder.tvRingtone.getText().toString(),
+                        holder.tvRingtoneUri.getText().toString(),
+                        holder.cbVibrate.isChecked(),
+                        holder.tvLabel.getText().toString()
+                ),
+                position
+        ));
 
         System.out.println("position = " + position);
         System.out.println("expandedPosition = "+ expandedPosition);
@@ -126,21 +147,25 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
             holder.glAlarmItem.setElevation(8);
             holder.cbRepeat.setVisibility(View.VISIBLE);
             holder.cbVibrate.setVisibility(View.VISIBLE);
-            holder.btRingtone.setVisibility(View.VISIBLE);
-            holder.etLabel.setVisibility(View.VISIBLE);
+            holder.tvRingtone.setVisibility(View.VISIBLE);
+            holder.tvLabel.setVisibility(View.VISIBLE);
+            holder.vHairlineLabel.setVisibility(View.VISIBLE);
             holder.btCollapse.setVisibility(View.VISIBLE);
             holder.btDelete.setVisibility(View.VISIBLE);
             holder.btExpand.setVisibility(View.GONE);
+            holder.vHairline.setVisibility(View.GONE);
         } else {
             holder.glAlarmItem.setBackgroundResource(R.color.colorPrimary);
             holder.glAlarmItem.setElevation(0);
             holder.cbRepeat.setVisibility(View.GONE);
             holder.cbVibrate.setVisibility(View.GONE);
-            holder.btRingtone.setVisibility(View.GONE);
-            holder.etLabel.setVisibility(View.GONE);
+            holder.tvRingtone.setVisibility(View.GONE);
+            holder.tvLabel.setVisibility(View.GONE);
+            holder.vHairlineLabel.setVisibility(View.GONE);
             holder.btCollapse.setVisibility(View.GONE);
             holder.btDelete.setVisibility(View.GONE);
             holder.btExpand.setVisibility(View.VISIBLE);
+            holder.vHairline.setVisibility(View.VISIBLE);
         }
     }
 
@@ -155,7 +180,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
 
         @Override
         public void onClick(View arg0) {
-            removeItem(position, id);
+            removeAlarm(position, id);
         }
     }
 
@@ -209,6 +234,21 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         }
     }
 
+    public class ringtoneOnClickListener implements View.OnClickListener {
+        Alarm alarm;
+        int position;
+
+        public ringtoneOnClickListener(Alarm alarm, int position) {
+            this.alarm = alarm;
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            launchRingtonePicker(alarm, position);
+        }
+    }
+
     @Override
     public int getItemCount() {
         return alarms.size();
@@ -217,14 +257,21 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     public void addAlarm(String time) {
         int id = dbHelper.getAlarms().get(dbHelper.getAlarms().size()-1).id+1;
         System.out.println("getItemCount : " + getItemCount());
-        alarms.add(getItemCount(), new Alarm(id, time, true, false, "ringtone", false, ""));
-        dbHelper.insertAlarm(new Alarm(id, time, true, false, "ringtone", false, ""));
+        Uri uri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM);
+        if (uri == null) {
+            uri = Uri.parse("content://settings/system/alarm_alert");
+        }
+        String txt_btn_rintone = RingtoneManager.getRingtone(context, uri).getTitle(context);
+        String ringtoneUri = uri.toString();
+        Alarm a = new Alarm(id, time, true, false, ringtoneUri, txt_btn_rintone, false, "");
+        alarms.add(getItemCount(), a);
+        dbHelper.insertAlarm(a);
         this.changeCursor(dbHelper.getCursorAlarms());
         int position = getItemCount();
         this.notifyItemInserted(position);
     }
 
-    public void removeItem(int position, int id) {
+    public void removeAlarm(int position, int id) {
         dbHelper.deleteAlarm(id);
         alarms.remove(position);
         this.changeCursor(dbHelper.getCursorAlarms());
@@ -237,8 +284,37 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         dbHelper.updateAlarm(alarm);
         Alarm a = alarms.get(position);
         a.setTime(alarm.time);
+        a.setActive(alarm.active);
+        a.setRepeat(alarm.repeat);
+        a.setRingtoneUri(alarm.ringtoneUri);
+        a.setRingtoneTitle(alarm.ringtoneTitle);
+        a.setLabel(alarm.label);
+        a.setVibrate(alarm.vibrate);
         this.changeCursor(dbHelper.getCursorAlarms());
         this.notifyItemChanged(position);
+    }
+
+    public void launchRingtonePicker(Alarm alarm, int position) {
+        mSelectedAlarm = alarm;
+        mSelectedPosition = position;
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        activity.startActivityForResult(intent, 1);
+    }
+
+    public void saveRingtoneUri(Intent intent) {
+        Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+        Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+        String title = ringtone.getTitle(context);
+        System.out.println("intent : " + title);
+
+        RingtoneManager.setActualDefaultRingtoneUri(activity, RingtoneManager.TYPE_ALARM, uri);
+
+        mSelectedAlarm.ringtoneUri = uri.toString();
+        mSelectedAlarm.ringtoneTitle = title;
+        updateAlarm(mSelectedAlarm, mSelectedPosition);
     }
 
     @Override
@@ -299,12 +375,15 @@ class SimpleViewHolder extends RecyclerView.ViewHolder
     public TextView tvTime;
     public Switch sActive;
     public CheckBox cbRepeat;
-    public Button btRingtone;
+    public TextView tvRingtone;
+    public TextView tvRingtoneUri;
     public CheckBox cbVibrate;
-    public EditText etLabel;
+    public TextView tvLabel;
+    public View vHairlineLabel;
     public Button btDelete;
     public Button btExpand;
     public Button btCollapse;
+    public View vHairline;
 
     public SimpleViewHolder (View itemView)
     {
@@ -314,12 +393,15 @@ class SimpleViewHolder extends RecyclerView.ViewHolder
         this.tvTime = (TextView) itemView.findViewById(R.id.time);
         this.sActive = (Switch) itemView.findViewById(R.id.active);
         this.cbRepeat = (CheckBox) itemView.findViewById(R.id.repeat);
-        this.btRingtone = (Button) itemView.findViewById(R.id.btn_ringtone);
+        this.tvRingtone = (TextView) itemView.findViewById(R.id.btn_ringtone);
+        this.tvRingtoneUri = (TextView) itemView.findViewById(R.id.ringtone_uri);
         this.cbVibrate = (CheckBox) itemView.findViewById(R.id.vibrate);
-        this.etLabel = (EditText) itemView.findViewById(R.id.label);
+        this.tvLabel = (TextView) itemView.findViewById(R.id.label);
+        this.vHairlineLabel = itemView.findViewById(R.id.hairline_label);
         this.btDelete = (Button) itemView.findViewById(R.id.btn_delete);
         this.btExpand = (Button) itemView.findViewById(R.id.btn_expand);
         this.btCollapse = (Button) itemView.findViewById(R.id.btn_collapse);
+        this.vHairline = itemView.findViewById(R.id.hairline);
 
         this.glAlarmItem.setTag(this);
     }

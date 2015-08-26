@@ -5,4 +5,5 @@
     <color name="active_item">#616161</color>
     <color name="colorPrimary">#424242</color>
     <color name="colorPrimaryDark">#000000</color>
+    <color name="hairline">#28ffffff</color>
 </resources>

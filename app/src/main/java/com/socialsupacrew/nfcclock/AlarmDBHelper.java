@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class AlarmDBHelper extends SQLiteOpenHelper {
     public final static String DB_NAME = "database.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
 
     public static final String TABLE_NAME = "Alarm";
 
@@ -21,7 +21,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     public static final String TIME = "time";
     public static final String ACTIVE = "active";
     public static final String REPEAT = "repeat";
-    public static final String RINGTONE = "ringtone";
+    public static final String RINGTONE_URI = "ringtone_uri";
+    public static final String RINGTONE_TITLE = "ringtone_title";
     public static final String VIBRATE = "vibrate";
     public static final String LABEL = "label";
 
@@ -31,7 +32,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
                     TIME + " TEXT, " +
                     ACTIVE + " INTEGER, " +
                     REPEAT + " INTEGER, " +
-                    RINGTONE + " TEXT, " +
+                    RINGTONE_TITLE + " TEXT, " +
+                    RINGTONE_URI + " TEXT, " +
                     VIBRATE + " INTEGER, " +
                     LABEL + " TEXT);";
 
@@ -58,7 +60,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         contentValues.put(TIME, a.time);
         contentValues.put(ACTIVE, a.active);
         contentValues.put(REPEAT, a.repeat);
-        contentValues.put(RINGTONE, a.ringtone);
+        contentValues.put(RINGTONE_TITLE, a.ringtoneTitle);
+        contentValues.put(RINGTONE_URI, a.ringtoneUri);
         contentValues.put(VIBRATE, a.vibrate);
         contentValues.put(LABEL, a.label);
         db.insert(TABLE_NAME, null, contentValues);
@@ -71,7 +74,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         contentValues.put(TIME, a.time);
         contentValues.put(ACTIVE, a.active);
         contentValues.put(REPEAT, a.repeat);
-        contentValues.put(RINGTONE, a.ringtone);
+        contentValues.put(RINGTONE_TITLE, a.ringtoneTitle);
+        contentValues.put(RINGTONE_URI, a.ringtoneUri);
         contentValues.put(VIBRATE, a.vibrate);
         contentValues.put(LABEL, a.label);
         db.update(TABLE_NAME, contentValues, ID + " = ? ", new String[]{Integer.toString(a.id)});
@@ -93,11 +97,12 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
             String time = c.getString(c.getColumnIndex(TIME));
             boolean active = c.getInt(c.getColumnIndex(ACTIVE)) == 1;
             boolean repeat = c.getInt(c.getColumnIndex(REPEAT)) == 1;
-            String ringtone = c.getString(c.getColumnIndex(RINGTONE));
+            String ringtone_title = c.getString(c.getColumnIndex(RINGTONE_TITLE));
+            String ringtone_uri = c.getString(c.getColumnIndex(RINGTONE_URI));
             boolean vibrate = c.getInt(c.getColumnIndex(VIBRATE)) == 1;
             String label = c.getString(c.getColumnIndex(LABEL));
 
-            alarms.add(new Alarm(id, time, active, repeat, ringtone, vibrate, label));
+            alarms.add(new Alarm(id, time, active, repeat, ringtone_uri, ringtone_title, vibrate, label));
         }
 
         c.close();

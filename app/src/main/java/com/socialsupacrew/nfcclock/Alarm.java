@@ -1,5 +1,7 @@
 package com.socialsupacrew.nfcclock;
 
+import android.net.Uri;
+
 /**
  * Created by SocialSupaCrew on 27/07/2015.
  */
@@ -9,13 +11,14 @@ public class Alarm {
     public String time;
     public boolean active;
     public boolean repeat;
-    public String ringtone;
+    public String ringtoneUri;
+    public String ringtoneTitle;
     public boolean vibrate;
     public String label;
 
     // Create a constructor
 
-    public Alarm(int id, String time, boolean active, boolean repeat, String ringtone, boolean vibrate, String label) {
+    public Alarm(int id, String time, boolean active, boolean repeat, String ringtoneUri, String ringtoneTitle, boolean vibrate, String label) {
         super();
         this.id = id;
         this.time = time;
@@ -23,7 +26,8 @@ public class Alarm {
         this.repeat = repeat;
         this.vibrate = vibrate;
         this.label = label;
-        this.ringtone = ringtone;
+        this.ringtoneUri = ringtoneUri;
+        this.ringtoneTitle = ringtoneTitle;
     }
 
     public int getId() {
@@ -58,12 +62,20 @@ public class Alarm {
         this.repeat = repeat;
     }
 
-    public String getRingtone() {
-        return ringtone;
+    public String getRingtoneUri() {
+        return ringtoneUri;
     }
 
-    public void setRingtone(String ringtone) {
-        this.ringtone = ringtone;
+    public void setRingtoneUri(String ringtoneUri) {
+        this.ringtoneUri = ringtoneUri;
+    }
+
+    public String getRingtoneTitle() {
+        return ringtoneTitle;
+    }
+
+    public void setRingtoneTitle(String ringtoneTitle) {
+        this.ringtoneTitle = ringtoneTitle;
     }
 
     public boolean isVibrate() {

@@ -1,7 +1,10 @@
 package com.socialsupacrew.nfcclock;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.database.Cursor;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Alarm> alarms = new ArrayList<>();
     AlarmDBHelper dbHelper;
+    SimpleCursorRecyclerAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 AlarmDBHelper.TIME,
                 AlarmDBHelper.ACTIVE,
                 AlarmDBHelper.REPEAT,
-                AlarmDBHelper.RINGTONE,
+                AlarmDBHelper.RINGTONE_URI,
+                AlarmDBHelper.RINGTONE_TITLE,
                 AlarmDBHelper.VIBRATE,
                 AlarmDBHelper.LABEL
         };
@@ -46,14 +51,27 @@ public class MainActivity extends AppCompatActivity {
                 R.id.label
         };
 
-        final SimpleCursorRecyclerAdapter cursorAdapter = new SimpleCursorRecyclerAdapter(R.layout.item_alarm, cursor, columns, widgets, this);
+        cursorAdapter = new SimpleCursorRecyclerAdapter(R.layout.item_alarm, cursor, columns, widgets, this);
         final RecyclerView rvAlarms = (RecyclerView) findViewById(R.id.rvAlarms);
-        rvAlarms.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
+//        rvAlarms.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
 //        final AlarmRecycleViewAdapter adapter = new AlarmRecycleViewAdapter(this, getAlarm());
         rvAlarms.setAdapter(cursorAdapter);
         rvAlarms.setLayoutManager(new LinearLayoutManager(this));
 
-
+        if (dbHelper.getAlarms().size() == 0) {
+            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_ALARM);
+            if (uri == null) {
+                uri = Uri.parse("content://settings/system/alarm_alert");
+            }
+            String txt_btn_rintone = RingtoneManager.getRingtone(getApplicationContext(), uri).getTitle(getApplicationContext());
+            String ringtoneUri = uri.toString();
+            Alarm a = new Alarm(0, "8:30", false, false, ringtoneUri, txt_btn_rintone, false, "");
+            alarms.add(cursorAdapter.getItemCount(), a);
+            dbHelper.insertAlarm(a);
+            cursorAdapter.changeCursor(dbHelper.getCursorAlarms());
+            int position = cursorAdapter.getItemCount();
+            cursorAdapter.notifyItemInserted(position);
+        }
 
         findViewById(R.id.fab_alarm).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +83,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private ArrayList<Alarm> getAlarm() {
-        alarms.add(new Alarm(0, "10:00", true, false, "testRingtone", false, ""));
-        return alarms;
+//    private ArrayList<Alarm> getAlarm() {
+//        alarms.add(new Alarm(0, "10:00", true, false, "testRingtone", false, ""));
+//        return alarms;
+//    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Uri uri;
+        String ringtonePath = "";
+        System.out.println("requestCode : " + requestCode);
+        System.out.println("resultCode : " + resultCode);
+        if (resultCode == RESULT_OK) {
+            uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            if (uri != null) {
+                ringtonePath = uri.toString();
+                cursorAdapter.saveRingtoneUri(data);
+            }
+        }
     }
 
 
