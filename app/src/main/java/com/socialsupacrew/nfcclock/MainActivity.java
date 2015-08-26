@@ -30,6 +30,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dbHelper = new AlarmDBHelper(this);
 
+        if (dbHelper.getAlarms().size() == 0) {
+            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_ALARM);
+            if (uri == null) {
+                uri = Uri.parse("content://settings/system/alarm_alert");
+            }
+            String txt_btn_rintone = RingtoneManager.getRingtone(getApplicationContext(), uri).getTitle(getApplicationContext());
+            String ringtoneUri = uri.toString();
+            Alarm a = new Alarm(0, "08:30", false, false, ringtoneUri, txt_btn_rintone, false, "");
+            alarms.add(0, a);
+            dbHelper.insertAlarm(a);
+        }
+
         final Cursor cursor = dbHelper.getCursorAlarms();
         String [] columns = new String[] {
                 AlarmDBHelper.ID,
@@ -53,25 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         cursorAdapter = new SimpleCursorRecyclerAdapter(R.layout.item_alarm, cursor, columns, widgets, this);
         final RecyclerView rvAlarms = (RecyclerView) findViewById(R.id.rvAlarms);
-//        rvAlarms.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
-//        final AlarmRecycleViewAdapter adapter = new AlarmRecycleViewAdapter(this, getAlarm());
         rvAlarms.setAdapter(cursorAdapter);
         rvAlarms.setLayoutManager(new LinearLayoutManager(this));
-
-        if (dbHelper.getAlarms().size() == 0) {
-            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_ALARM);
-            if (uri == null) {
-                uri = Uri.parse("content://settings/system/alarm_alert");
-            }
-            String txt_btn_rintone = RingtoneManager.getRingtone(getApplicationContext(), uri).getTitle(getApplicationContext());
-            String ringtoneUri = uri.toString();
-            Alarm a = new Alarm(0, "08:30", false, false, ringtoneUri, txt_btn_rintone, false, "");
-            alarms.add(cursorAdapter.getItemCount(), a);
-            dbHelper.insertAlarm(a);
-            cursorAdapter.changeCursor(dbHelper.getCursorAlarms());
-            int position = cursorAdapter.getItemCount();
-            cursorAdapter.notifyItemInserted(position);
-        }
 
         findViewById(R.id.fab_alarm).setOnClickListener(new View.OnClickListener() {
             @Override
