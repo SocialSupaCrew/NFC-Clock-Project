@@ -77,7 +77,7 @@ public class LabelDialogFragment extends DialogFragment {
 
     private void set(String label) {
         if (label.trim().length() == 0) {
-            label = getResources().getString(R.string.label_hint);
+            label = "";
         }
         Alarm a = new Alarm(mAlarm.id, mAlarm.time, mAlarm.active, mAlarm.repeat, mAlarm.ringtoneUri, mAlarm.ringtoneTitle, mAlarm.vibrate, label);
         mCursorAdapter.updateAlarm(a, mPosition);
