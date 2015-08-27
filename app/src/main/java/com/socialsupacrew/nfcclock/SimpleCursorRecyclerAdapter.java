@@ -250,7 +250,13 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     }
 
     public void addAlarm(String time) {
-        int id = dbHelper.getAlarms().get(dbHelper.getAlarms().size()-1).id+1;
+        int id;
+        if (dbHelper.getAlarms().size() == 0) {
+            id = 0;
+        } else {
+            id = dbHelper.getAlarms().get(dbHelper.getAlarms().size()-1).id+1;
+        }
+        
         System.out.println("getItemCount : " + getItemCount());
         Uri uri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM);
         if (uri == null) {
