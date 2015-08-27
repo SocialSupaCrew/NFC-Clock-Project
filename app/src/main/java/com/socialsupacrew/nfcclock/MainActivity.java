@@ -37,7 +37,15 @@ public class MainActivity extends AppCompatActivity {
             }
             String txt_btn_rintone = RingtoneManager.getRingtone(getApplicationContext(), uri).getTitle(getApplicationContext());
             String ringtoneUri = uri.toString();
-            Alarm a = new Alarm(0, "08:30", false, false, ringtoneUri, txt_btn_rintone, false, "");
+            ArrayList<Integer> dayOfWeek = new ArrayList<>();
+            dayOfWeek.add(1);
+            dayOfWeek.add(2);
+            dayOfWeek.add(3);
+            dayOfWeek.add(4);
+            dayOfWeek.add(5);
+            dayOfWeek.add(6);
+            dayOfWeek.add(7);
+            Alarm a = new Alarm(0, "08:30", false, false, dayOfWeek, ringtoneUri, txt_btn_rintone, false, "");
             alarms.add(0, a);
             dbHelper.insertAlarm(a);
         }

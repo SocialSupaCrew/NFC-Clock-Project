@@ -1,6 +1,13 @@
 package com.socialsupacrew.nfcclock;
 
 import android.net.Uri;
+import android.text.format.DateUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by SocialSupaCrew on 27/07/2015.
@@ -11,6 +18,7 @@ public class Alarm {
     public String time;
     public boolean active;
     public boolean repeat;
+    public ArrayList<Integer> repeatDays;
     public String ringtoneUri;
     public String ringtoneTitle;
     public boolean vibrate;
@@ -18,12 +26,13 @@ public class Alarm {
 
     // Create a constructor
 
-    public Alarm(int id, String time, boolean active, boolean repeat, String ringtoneUri, String ringtoneTitle, boolean vibrate, String label) {
+    public Alarm(int id, String time, boolean active, boolean repeat, ArrayList<Integer> repeatDays, String ringtoneUri, String ringtoneTitle, boolean vibrate, String label) {
         super();
         this.id = id;
         this.time = time;
         this.active = active;
         this.repeat = repeat;
+        this.repeatDays = repeatDays;
         this.vibrate = vibrate;
         this.label = label;
         this.ringtoneUri = ringtoneUri;
@@ -62,6 +71,14 @@ public class Alarm {
         this.repeat = repeat;
     }
 
+    public ArrayList<Integer> getRepeatDays() {
+        return repeatDays;
+    }
+
+    public void setRepeatDays(ArrayList<Integer> repeatDays) {
+        this.repeatDays = repeatDays;
+    }
+
     public String getRingtoneUri() {
         return ringtoneUri;
     }
@@ -92,5 +109,17 @@ public class Alarm {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public static String[] getShortWeekdays() {
+        final String[] shortWeekday = new String[7];
+        final SimpleDateFormat format = new SimpleDateFormat("EEEEE");
+
+        long aMonday = new GregorianCalendar(2014, Calendar.JULY, 21).getTimeInMillis();
+        for (int day = 0; day < 7; day++) {
+            shortWeekday[day] = format.format(new Date(aMonday + day * DateUtils.DAY_IN_MILLIS));
+        }
+
+        return shortWeekday;
     }
 }

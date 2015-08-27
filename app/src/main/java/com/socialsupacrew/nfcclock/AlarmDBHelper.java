@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class AlarmDBHelper extends SQLiteOpenHelper {
     public final static String DB_NAME = "database.db";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 7;
 
     public static final String TABLE_NAME = "Alarm";
 
@@ -21,6 +21,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     public static final String TIME = "time";
     public static final String ACTIVE = "active";
     public static final String REPEAT = "repeat";
+    public static final String DAYS_OF_WEEK = "days_of_week";
     public static final String RINGTONE_URI = "ringtone_uri";
     public static final String RINGTONE_TITLE = "ringtone_title";
     public static final String VIBRATE = "vibrate";
@@ -32,6 +33,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
                     TIME + " TEXT, " +
                     ACTIVE + " INTEGER, " +
                     REPEAT + " INTEGER, " +
+                    DAYS_OF_WEEK + " TEXT, " +
                     RINGTONE_TITLE + " TEXT, " +
                     RINGTONE_URI + " TEXT, " +
                     VIBRATE + " INTEGER, " +
@@ -55,11 +57,22 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertAlarm(Alarm a) {
+        String dayOfWeek = "";
+        if (a.repeatDays.size() != 0) {
+            for (int i= 0; i < a.repeatDays.size(); i++) {
+                dayOfWeek += Integer.toString(a.repeatDays.get(i));
+                if (i != a.repeatDays.size()){
+                    dayOfWeek += ',';
+                }
+            }
+        }
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TIME, a.time);
         contentValues.put(ACTIVE, a.active);
         contentValues.put(REPEAT, a.repeat);
+        contentValues.put(DAYS_OF_WEEK, dayOfWeek);
         contentValues.put(RINGTONE_TITLE, a.ringtoneTitle);
         contentValues.put(RINGTONE_URI, a.ringtoneUri);
         contentValues.put(VIBRATE, a.vibrate);
@@ -69,11 +82,22 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean updateAlarm(Alarm a) {
+        String dayOfWeek = "";
+        if (a.repeatDays.size() != 0) {
+            for (int i= 0; i < a.repeatDays.size(); i++) {
+                dayOfWeek += Integer.toString(a.repeatDays.get(i));
+                if (i != a.repeatDays.size()){
+                    dayOfWeek += ',';
+                }
+            }
+        }
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TIME, a.time);
         contentValues.put(ACTIVE, a.active);
         contentValues.put(REPEAT, a.repeat);
+        contentValues.put(DAYS_OF_WEEK, dayOfWeek);
         contentValues.put(RINGTONE_TITLE, a.ringtoneTitle);
         contentValues.put(RINGTONE_URI, a.ringtoneUri);
         contentValues.put(VIBRATE, a.vibrate);
@@ -97,12 +121,19 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
             String time = c.getString(c.getColumnIndex(TIME));
             boolean active = c.getInt(c.getColumnIndex(ACTIVE)) == 1;
             boolean repeat = c.getInt(c.getColumnIndex(REPEAT)) == 1;
+            String dayOfWeek = c.getString(c.getColumnIndex(DAYS_OF_WEEK));
             String ringtone_title = c.getString(c.getColumnIndex(RINGTONE_TITLE));
             String ringtone_uri = c.getString(c.getColumnIndex(RINGTONE_URI));
             boolean vibrate = c.getInt(c.getColumnIndex(VIBRATE)) == 1;
             String label = c.getString(c.getColumnIndex(LABEL));
 
-            alarms.add(new Alarm(id, time, active, repeat, ringtone_uri, ringtone_title, vibrate, label));
+            String[] tempDayOfWeek = dayOfWeek.split(",");
+            ArrayList<Integer> repeatDays = new ArrayList<>();
+            for (String aTempDayOfWeek : tempDayOfWeek) {
+                repeatDays.add(Integer.parseInt(aTempDayOfWeek));
+            }
+
+            alarms.add(new Alarm(id, time, active, repeat, repeatDays, ringtone_uri, ringtone_title, vibrate, label));
         }
 
         c.close();

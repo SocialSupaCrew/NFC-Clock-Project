@@ -32,6 +32,6 @@ public class TimePickerUpdateAlarm extends DialogFragment implements TimePickerD
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         String time = String.format("%02d:%02d", hourOfDay, minute);
-        mCursorAdapter.updateAlarm(new Alarm(mAlarm.id, time, mAlarm.active, mAlarm.repeat, mAlarm.ringtoneUri, mAlarm.ringtoneTitle, mAlarm.vibrate, mAlarm.label), mPosition);
+        mCursorAdapter.updateAlarm(new Alarm(mAlarm.id, time, mAlarm.active, mAlarm.repeat, mAlarm.repeatDays, mAlarm.ringtoneUri, mAlarm.ringtoneTitle, mAlarm.vibrate, mAlarm.label), mPosition);
     }
 }

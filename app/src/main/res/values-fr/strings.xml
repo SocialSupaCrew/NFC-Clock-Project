@@ -8,4 +8,11 @@
     <string name="txt_btn_rintone">Aucune</string>
     <string name="label_cancel">Annuler</string>
     <string name="label_set">OK</string>
+    <string name="txt_btn_friday">V</string>
+    <string name="txt_btn_monday">L</string>
+    <string name="txt_btn_saturday">S</string>
+    <string name="txt_btn_sunday">D</string>
+    <string name="txt_btn_thursday">J</string>
+    <string name="txt_btn_tuesday">M</string>
+    <string name="txt_btn_wednesday">M</string>
 </resources>
