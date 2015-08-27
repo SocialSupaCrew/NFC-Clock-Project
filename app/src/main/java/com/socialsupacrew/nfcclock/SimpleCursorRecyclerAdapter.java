@@ -34,6 +34,7 @@ import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,35 +110,11 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
 
         holder.btDelete.setOnClickListener(new deleteOnClickListener(expandedPosition, Integer.parseInt(holder.tvId.getText().toString())));
 
-        holder.tvTime.setOnClickListener(
-                new changeTimeOnClickListener(
-                        this,
-                        position,
-                        new Alarm(
-                                Integer.parseInt(holder.tvId.getText().toString()),
-                                holder.tvTime.getText().toString(),
-                                holder.sActive.isChecked(),
-                                holder.cbRepeat.isChecked(),
-                                holder.tvRingtone.getText().toString(),
-                                holder.tvRingtoneUri.getText().toString(),
-                                holder.cbVibrate.isChecked(),
-                                holder.tvLabel.getText().toString()
-                        )
-                ));
+        holder.tvTime.setOnClickListener(new changeTimeOnClickListener(this, position, alarm));
 
-        holder.tvRingtone.setOnClickListener(new ringtoneOnClickListener(
-                new Alarm(
-                        Integer.parseInt(holder.tvId.getText().toString()),
-                        holder.tvTime.getText().toString(),
-                        holder.sActive.isChecked(),
-                        holder.cbRepeat.isChecked(),
-                        holder.tvRingtone.getText().toString(),
-                        holder.tvRingtoneUri.getText().toString(),
-                        holder.cbVibrate.isChecked(),
-                        holder.tvLabel.getText().toString()
-                ),
-                position
-        ));
+        holder.tvRingtone.setOnClickListener(new ringtoneOnClickListener(alarm, position));
+
+        holder.tvLabel.setOnClickListener(new labelOnClickListener(this, alarm, position));
 
         System.out.println("position = " + position);
         System.out.println("expandedPosition = "+ expandedPosition);
@@ -246,6 +223,24 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         @Override
         public void onClick(View v) {
             launchRingtonePicker(alarm, position);
+        }
+    }
+
+    public class labelOnClickListener implements View.OnClickListener {
+        SimpleCursorRecyclerAdapter adapter;
+        Alarm alarm;
+        int position;
+
+        public labelOnClickListener(SimpleCursorRecyclerAdapter adapter, Alarm alarm, int position) {
+            this.adapter = adapter;
+            this.alarm = alarm;
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            DialogFragment dialogFragment = new LabelDialogFragment(adapter, position, alarm);
+            dialogFragment.show(activity.getFragmentManager(), "Label dialog");
         }
     }
 

@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 AlarmDBHelper.VIBRATE,
                 AlarmDBHelper.LABEL
         };
+
         int [] widgets = new int[] {
                 R.id.id_alarm,
                 R.id.time,

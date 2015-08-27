@@ -7,4 +7,6 @@
     <string name="txt_vibrate">Vibrate</string>
     <string name="label_hint">Label</string>
     <string name="txt_btn_rintone">None</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_set">OK</string>
 </resources>

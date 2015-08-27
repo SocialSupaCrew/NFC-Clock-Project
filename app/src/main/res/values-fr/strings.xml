@@ -6,4 +6,6 @@
     <string name="txt_vibrate">Vibreur</string>
     <string name="label_hint">Libellé</string>
     <string name="txt_btn_rintone">Aucune</string>
+    <string name="label_cancel">Annuler</string>
+    <string name="label_set">OK</string>
 </resources>

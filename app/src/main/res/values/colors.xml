@@ -6,4 +6,5 @@
     <color name="colorPrimary">#424242</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="hairline">#28ffffff</color>
+    <color name="teal">#009688</color>
 </resources>
