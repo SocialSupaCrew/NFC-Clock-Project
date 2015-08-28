@@ -6,7 +6,7 @@
         <item name="android:windowBackground">@color/background_window</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:colorAccent">@color/teal</item>
 
         <item name="colorControlActivated">@android:color/white</item>
@@ -15,6 +15,11 @@
 
         <item name="android:textColorHint">@android:color/white</item>
 
+    </style>
+
+    <style name="AlarmSwitchTheme">
+        <item name="android:colorControlActivated">@color/teal</item>
+        <item name="android:colorControlNormal">@color/teal100</item>
     </style>
 
 </resources>

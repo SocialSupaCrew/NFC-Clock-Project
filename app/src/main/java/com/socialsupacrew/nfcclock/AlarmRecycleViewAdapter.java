@@ -13,7 +13,7 @@
 //import android.widget.GridLayout;
 //import android.widget.Switch;
 //import android.widget.TextView;
-//import android.widget.Toast;
+//import android.widget.ToastMaker;
 //
 //import java.util.ArrayList;
 //
@@ -183,18 +183,18 @@
 //
 //        if (expandedPosition >= 0) {
 //            notifyItemChanged(expandedPosition);
-////            Toast.makeText(context, "bbbb", Toast.LENGTH_SHORT).show();
+////            ToastMaker.makeText(context, "bbbb", ToastMaker.LENGTH_SHORT).show();
 //        }
 //
 //        if (expandedPosition != holder.getAdapterPosition()) {
 //            expandedPosition = holder.getAdapterPosition();
 //            notifyItemChanged(expandedPosition);
-////            Toast.makeText(context, "aaaa", Toast.LENGTH_SHORT).show();
+////            ToastMaker.makeText(context, "aaaa", ToastMaker.LENGTH_SHORT).show();
 //        } else {
 //            expandedPosition = -1;
 //            notifyItemChanged(expandedPosition);
 //        }
 //
-////        Toast.makeText(context, ""+toCollapse, Toast.LENGTH_SHORT).show();
+////        ToastMaker.makeText(context, ""+toCollapse, ToastMaker.LENGTH_SHORT).show();
 //    }
 //}

@@ -35,6 +35,6 @@ public class TimePickerNewAlarm extends DialogFragment implements TimePickerDial
         String time = String.format("%02d:%02d", hourOfDay, minute);
 //        System.out.println("time : ");
 //        System.out.println(mAlarms.get(mAlarms.size()-1).id);
-        mCursorAdapter.addAlarm(time);
+        mCursorAdapter.addAlarm(time, true);
     }
 }

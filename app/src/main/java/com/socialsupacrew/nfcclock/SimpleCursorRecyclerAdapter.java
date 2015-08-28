@@ -156,16 +156,6 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
             btnDay.setOnClickListener(new btnDayOnClickListener(alarm, btnDay, position));
         }
 
-
-//        for (int i = 0; i < 7; i++){
-//            final Button dayButton = (Button) mFactory.inflate(
-//                    R.layout.day_button, holder.llRepeatDays, false);
-//            dayButton.setText(mShortWeekDayStrings[i]);
-//            dayButton.setContentDescription(mLongWeekDayStrings[DAY_ORDER[i]]);
-//            holder.llRepeatDays.addView(dayButton);
-//            holder.day
-//        }
-
         holder.btExpand.setOnClickListener(new expandOnClickListener(holder.getAdapterPosition()));
         holder.btCollapse.setOnClickListener(new collapseOnClickListener(-1));
         holder.btDelete.setOnClickListener(new deleteOnClickListener(expandedPosition, Integer.parseInt(holder.tvId.getText().toString())));
@@ -175,6 +165,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         holder.tvLabel.setOnClickListener(new labelOnClickListener(this, alarm, position));
         holder.cbRepeat.setOnClickListener(new repeatOnClickListener(alarm, position));
         holder.cbVibrate.setOnClickListener(new vibrateOnClickListener(alarm, position));
+        holder.sActive.setOnClickListener(new activeOnClickListener(alarm, position));
 
         System.out.println("position = " + position);
         System.out.println("expandedPosition = "+ expandedPosition);
@@ -323,7 +314,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         @Override
         public void onClick(View v) {
             alarm.repeat = !alarm.repeat;
-            updateAlarm(alarm, position);
+            updateAlarm(alarm, position, false);
         }
     }
 
@@ -366,7 +357,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
                 alarm.repeatDays.add(7);
             }
 
-            updateAlarm(alarm, position);
+            updateAlarm(alarm, position, false);
         }
     }
 
@@ -382,7 +373,24 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         @Override
         public void onClick(View v) {
             alarm.vibrate = !alarm.vibrate;
-            updateAlarm(alarm, position);
+            updateAlarm(alarm, position, false);
+        }
+    }
+
+    public class activeOnClickListener implements View.OnClickListener {
+        Alarm alarm;
+        int position;
+
+        public activeOnClickListener(Alarm alarm, int position) {
+            this.alarm = alarm;
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            alarm.active = !alarm.active;
+            System.out.println("active : " + alarm.active);
+            updateAlarm(alarm, position, true);
         }
     }
 
@@ -391,7 +399,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         return alarms.size();
     }
 
-    public void addAlarm(String time) {
+    public void addAlarm(String time, boolean popToast) {
         int id;
         if (dbHelper.getAlarms().size() == 0) {
             id = 0;
@@ -417,6 +425,9 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         Alarm a = new Alarm(id, time, true, false, dayOfWeek, ringtoneUri, txt_btn_rintone, false, "");
         alarms.add(getItemCount(), a);
         dbHelper.insertAlarm(a);
+        if (a.active && popToast) {
+            ToastMaker.popAlarmSetToast(context, Calendar.getInstance(), a);
+        }
         this.changeCursor(dbHelper.getCursorAlarms());
         int position = getItemCount();
         this.notifyItemInserted(position);
@@ -431,7 +442,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         this.notifyItemChanged(expandedPosition);
     }
 
-    public void updateAlarm(Alarm alarm, int position) {
+    public void updateAlarm(Alarm alarm, int position, boolean popToast) {
         dbHelper.updateAlarm(alarm);
         Alarm a = alarms.get(position);
         a.setTime(alarm.time);
@@ -442,6 +453,9 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         a.setRingtoneTitle(alarm.ringtoneTitle);
         a.setLabel(alarm.label);
         a.setVibrate(alarm.vibrate);
+        if (a.active && popToast) {
+            ToastMaker.popAlarmSetToast(context, Calendar.getInstance(), a);
+        }
         this.changeCursor(dbHelper.getCursorAlarms());
         this.notifyItemChanged(position);
     }
@@ -466,7 +480,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
 
         mSelectedAlarm.ringtoneUri = uri.toString();
         mSelectedAlarm.ringtoneTitle = title;
-        updateAlarm(mSelectedAlarm, mSelectedPosition);
+        updateAlarm(mSelectedAlarm, mSelectedPosition, false);
     }
 
     @Override
@@ -476,19 +490,19 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
 
         if (expandedPosition >= 0) {
             this.notifyItemChanged(expandedPosition);
-//            Toast.makeText(context, "bbbb", Toast.LENGTH_SHORT).show();
+//            ToastMaker.makeText(context, "bbbb", ToastMaker.LENGTH_SHORT).show();
         }
 
         if (expandedPosition != holder.getAdapterPosition()) {
             expandedPosition = holder.getAdapterPosition();
             this.notifyItemChanged(expandedPosition);
-//            Toast.makeText(context, "aaaa", Toast.LENGTH_SHORT).show();
+//            ToastMaker.makeText(context, "aaaa", ToastMaker.LENGTH_SHORT).show();
         } else {
             expandedPosition = -1;
             this.notifyItemChanged(expandedPosition);
         }
 
-//        Toast.makeText(context, ""+toCollapse, Toast.LENGTH_SHORT).show();
+//        ToastMaker.makeText(context, ""+toCollapse, ToastMaker.LENGTH_SHORT).show();
     }
 
     /**

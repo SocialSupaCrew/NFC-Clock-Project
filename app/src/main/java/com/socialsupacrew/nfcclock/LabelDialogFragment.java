@@ -80,7 +80,7 @@ public class LabelDialogFragment extends DialogFragment {
             label = "";
         }
         Alarm a = new Alarm(mAlarm.id, mAlarm.time, mAlarm.active, mAlarm.repeat, mAlarm.repeatDays, mAlarm.ringtoneUri, mAlarm.ringtoneTitle, mAlarm.vibrate, label);
-        mCursorAdapter.updateAlarm(a, mPosition);
+        mCursorAdapter.updateAlarm(a, mPosition, false);
 
         dismiss();
     }

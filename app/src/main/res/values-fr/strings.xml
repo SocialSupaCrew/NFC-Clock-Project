@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">NFC Clock</string>
     <string name="txt_repeat">Répéter</string>
     <string name="action_settings">Paramètres</string>
@@ -15,4 +15,25 @@
     <string name="txt_btn_thursday">J</string>
     <string name="txt_btn_tuesday">M</string>
     <string name="txt_btn_wednesday">M</string>
+
+    <string-array name="alarm_set">
+        <item msgid="6450913786084215050">"Prochaine alarme prévue dans moins d\'une minute."</item>
+        <item msgid="6002066367368421848">"Prochaine alarme prévue dans <xliff:g id="DAYS">%1$s</xliff:g>."</item>
+        <item msgid="8824719306247973774">"Prochaine alarme prévue dans <xliff:g id="HOURS">%2$s</xliff:g>."</item>
+        <item msgid="8182406852935468862">"Prochaine alarme prévue dans <xliff:g id="DAYS">%1$s</xliff:g> et <xliff:g id="HOURS">%2$s</xliff:g>."</item>
+        <item msgid="2532279224777213194">"Prochaine alarme prévue dans <xliff:g id="MINUTES">%3$s</xliff:g>."</item>
+        <item msgid="5936557894247187717">"Prochaine alarme prévue dans <xliff:g id="DAYS">%1$s</xliff:g> et <xliff:g id="MINUTES">%3$s</xliff:g>."</item>
+        <item msgid="9115697840826129603">"Prochaine alarme prévue dans <xliff:g id="HOURS">%2$s</xliff:g> et <xliff:g id="MINUTES">%3$s</xliff:g>."</item>
+        <item msgid="2332583385137381060">"La prochaine alarme est prévue dans <xliff:g id="DAYS">%1$s</xliff:g>, <xliff:g id="HOURS">%2$s</xliff:g> et <xliff:g id="MINUTES">%3$s</xliff:g>."</item>
+    </string-array>
+
+    <string name="day" msgid="7984755014526510295">"1 jour"</string>
+    <string name="days" msgid="2070509222727852210">"<xliff:g id="DAYS">%s</xliff:g> jours"</string>
+    <string name="hour" msgid="2546819039651509323">"1 heure"</string>
+    <string name="hours" msgid="2071487018566991613">"<xliff:g id="HOURS">%s</xliff:g> heures"</string>
+    <string name="minute" msgid="2486157997434653710">"1 minute"</string>
+    <string name="minutes" msgid="6115838729146292526">"<xliff:g id="MINUTES">%s</xliff:g> minutes"</string>
+    <string name="every_day" msgid="4100909974923444602">"Tous les jours"</string>
+    <string name="never" msgid="54104287800571769">"Jamais"</string>
+    <string name="day_concat" msgid="971998564991636532">", "</string>
 </resources>
