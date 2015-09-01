@@ -31,6 +31,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -43,6 +44,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -125,6 +127,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         holder.tvRingtoneUri.setText(alarm.ringtoneUri);
         holder.cbVibrate.setChecked(alarm.vibrate);
         holder.tvLabel.setText(alarm.label);
+        holder.tvLabelCollapse.setText(alarm.label);
 
         holder.btDayMon.setContentDescription(Integer.toString(DAY_ORDER[0]));
         holder.btDayTues.setContentDescription(Integer.toString(DAY_ORDER[1]));
@@ -188,6 +191,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
             holder.btDelete.setVisibility(View.VISIBLE);
             holder.btExpand.setVisibility(View.GONE);
             holder.vHairline.setVisibility(View.GONE);
+            holder.tvLabelCollapse.setVisibility(View.GONE);
         } else {
             holder.glAlarmItem.setBackgroundResource(R.color.colorPrimary);
             holder.glAlarmItem.setElevation(0);
@@ -201,6 +205,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
             holder.btDelete.setVisibility(View.GONE);
             holder.btExpand.setVisibility(View.VISIBLE);
             holder.vHairline.setVisibility(View.VISIBLE);
+            holder.tvLabelCollapse.setVisibility(View.VISIBLE);
         }
     }
 
@@ -547,10 +552,11 @@ class SimpleViewHolder extends RecyclerView.ViewHolder
     public CheckBox cbVibrate;
     public TextView tvLabel;
     public View vHairlineLabel;
-    public Button btDelete;
-    public Button btExpand;
-    public Button btCollapse;
+    public ImageButton btDelete;
+    public ImageButton btExpand;
+    public ImageButton btCollapse;
     public View vHairline;
+    public TextView tvLabelCollapse;
 
     public Button btDayMon;
     public Button btDayTues;
@@ -574,10 +580,11 @@ class SimpleViewHolder extends RecyclerView.ViewHolder
         this.cbVibrate = (CheckBox) itemView.findViewById(R.id.vibrate);
         this.tvLabel = (TextView) itemView.findViewById(R.id.label);
         this.vHairlineLabel = itemView.findViewById(R.id.hairline_label);
-        this.btDelete = (Button) itemView.findViewById(R.id.btn_delete);
-        this.btExpand = (Button) itemView.findViewById(R.id.btn_expand);
-        this.btCollapse = (Button) itemView.findViewById(R.id.btn_collapse);
+        this.btDelete = (ImageButton) itemView.findViewById(R.id.btn_delete);
+        this.btExpand = (ImageButton) itemView.findViewById(R.id.btn_expand);
+        this.btCollapse = (ImageButton) itemView.findViewById(R.id.btn_collapse);
         this.vHairline = itemView.findViewById(R.id.hairline);
+        this.tvLabelCollapse = (TextView) itemView.findViewById(R.id.label_collapse);
 
         this.btDayMon = (Button) itemView.findViewById(R.id.btn_monday);
         this.btDayTues = (Button) itemView.findViewById(R.id.btn_tuesday);

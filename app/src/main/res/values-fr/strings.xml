@@ -36,4 +36,8 @@
     <string name="every_day" msgid="4100909974923444602">"Tous les jours"</string>
     <string name="never" msgid="54104287800571769">"Jamais"</string>
     <string name="day_concat" msgid="971998564991636532">", "</string>
+    <string name="delete_alarm">Supprimer l\'alarme</string>
+    <string name="expand_alarm">Développer l\'alarme</string>
+    <string name="collapse_alarm">Réduire l\'alarme</string>
+    <string name="add_alarm">Ajouter une alarme</string>
 </resources>

@@ -36,4 +36,8 @@
     <string name="every_day">Every day</string>
     <string name="never">Never</string>
     <string name="day_concat">", "</string>
+    <string name="delete_alarm">Delete alarm</string>
+    <string name="expand_alarm">Expand alarm</string>
+    <string name="collapse_alarm">Collapse alarm</string>
+    <string name="add_alarm">Add alarm</string>
 </resources>

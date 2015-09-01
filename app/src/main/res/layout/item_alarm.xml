@@ -258,39 +258,69 @@
         android:layout_columnSpan="2"
         android:visibility="gone" />
 
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_margin="16dp"
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:scaleType="center"
         android:layout_row="6"
         android:layout_column="0"
         android:id="@+id/btn_delete"
-        android:background="@drawable/dic_delete"
+        android:contentDescription="@string/delete_alarm"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_delete_small"
         android:visibility="gone"/>
 
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_margin="16dp"
+    <TextView
+        android:id="@+id/label_collapse"
+        android:layout_width="wrap_content"
+        android:layout_gravity="bottom"
+        android:maxWidth="200dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_gravity="end"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/white"
         android:layout_row="6"
-        android:layout_column="1"
-        android:id="@+id/btn_expand"
-        android:background="@drawable/dic_expand"/>
+        android:layout_column="0"/>
 
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_margin="16dp"
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_gravity="end"
         android:layout_row="6"
         android:layout_column="1"
+        android:src="@drawable/ic_expand"
+        android:id="@+id/btn_expand"
+        android:contentDescription="@string/expand_alarm"
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_row="6"
+        android:layout_column="1"
+        android:src="@drawable/ic_collapse"
         android:id="@+id/btn_collapse"
-        android:background="@drawable/dic_collapse"
+        android:contentDescription="@string/collapse_alarm"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:visibility="gone"/>
 
     <View
