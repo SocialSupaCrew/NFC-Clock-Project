@@ -13,6 +13,8 @@ import java.util.Calendar;
 /**
  * Created by SocialSupaCrew on 19/08/2015.
  */
+
+// Class that display the time picker for a new alarm
 public class TimePickerNewAlarm extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     SimpleCursorRecyclerAdapter mCursorAdapter;

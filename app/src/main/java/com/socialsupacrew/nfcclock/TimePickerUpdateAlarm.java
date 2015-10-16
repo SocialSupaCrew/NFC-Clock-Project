@@ -10,6 +10,7 @@ import android.widget.TimePicker;
 /**
  * Created by SocialSupaCrew on 24/08/2015.
  */
+// Class that display a time picker when you update the time
 public class TimePickerUpdateAlarm extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     SimpleCursorRecyclerAdapter mCursorAdapter;
     int mPosition;

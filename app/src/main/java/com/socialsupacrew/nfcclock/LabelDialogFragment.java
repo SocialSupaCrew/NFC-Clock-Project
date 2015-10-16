@@ -17,6 +17,8 @@ import android.widget.TextView;
 /**
  * Created by SocialSupaCrew on 27/08/2015.
  */
+
+// Class that display the label dialog
 public class LabelDialogFragment extends DialogFragment {
 
     private EditText mLabelBox;
@@ -25,6 +27,7 @@ public class LabelDialogFragment extends DialogFragment {
     private int mPosition;
     private Alarm mAlarm;
 
+//    Constructor
     public LabelDialogFragment(SimpleCursorRecyclerAdapter cursorAdapter, int position, Alarm alarm) {
         this.mCursorAdapter = cursorAdapter;
         this.mPosition = position;

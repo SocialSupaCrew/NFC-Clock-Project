@@ -39,6 +39,8 @@ public class Alarm {
         this.ringtoneTitle = ringtoneTitle;
     }
 
+//    Getter and setter of an alarm
+
     public int getId() {
         return id;
     }
@@ -111,15 +113,4 @@ public class Alarm {
         this.label = label;
     }
 
-    public static String[] getShortWeekdays() {
-        final String[] shortWeekday = new String[7];
-        final SimpleDateFormat format = new SimpleDateFormat("EEEEE");
-
-        long aMonday = new GregorianCalendar(2014, Calendar.JULY, 21).getTimeInMillis();
-        for (int day = 0; day < 7; day++) {
-            shortWeekday[day] = format.format(new Date(aMonday + day * DateUtils.DAY_IN_MILLIS));
-        }
-
-        return shortWeekday;
-    }
 }

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new AlarmDBHelper(this);
 
         if (dbHelper.getAlarms().size() == 0) {
+//            Default alarm on the first launch
             Uri uri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_ALARM);
             if (uri == null) {
                 uri = Uri.parse("content://settings/system/alarm_alert");
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         rvAlarms.setAdapter(cursorAdapter);
         rvAlarms.setLayoutManager(new LinearLayoutManager(this));
 
+//        Listener to add new alarm
         findViewById(R.id.fab_alarm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,14 +89,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    private ArrayList<Alarm> getAlarm() {
-//        alarms.add(new Alarm(0, "10:00", true, false, "testRingtone", false, ""));
-//        return alarms;
-//    }
-
+//    Result of the chosen ringtone
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         Uri uri;
         String ringtonePath = "";
         System.out.println("requestCode : " + requestCode);

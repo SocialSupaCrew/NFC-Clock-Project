@@ -64,14 +64,9 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     private ArrayList<Alarm> alarms;
     private Context context;
     private Activity activity;
-    private int position;
     private int expandedPosition = -1;
     Alarm mSelectedAlarm;
     int mSelectedPosition;
-    private LayoutInflater mFactory;
-    private String[] mShortWeekDayStrings;
-    private String[] mLongWeekDayStrings;
-    DateFormatSymbols dfs = new DateFormatSymbols();
     private int[] DAY_ORDER = new int[] {
             Calendar.MONDAY,
             Calendar.TUESDAY,
@@ -94,9 +89,6 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         findColumns(c, from);
         dbHelper = new AlarmDBHelper(this.context);
         alarms = dbHelper.getAlarms();
-        this.mFactory = LayoutInflater.from(context);
-        this.mShortWeekDayStrings = Alarm.getShortWeekdays();
-        this.mLongWeekDayStrings = dfs.getWeekdays();
     }
 
     @Override
@@ -118,6 +110,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         final int[] from = mFrom;
         ArrayList<Button> btnDays = new ArrayList<>();
 
+//        set alarm
         Alarm alarm = alarms.get(position);
         holder.tvId.setText(Integer.toString(alarm.id));
         holder.tvTime.setText(alarm.time);
@@ -159,6 +152,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
             btnDay.setOnClickListener(new btnDayOnClickListener(alarm, btnDay, position));
         }
 
+//        Listener for all elements
         holder.btExpand.setOnClickListener(new expandOnClickListener(holder.getAdapterPosition()));
         holder.btCollapse.setOnClickListener(new collapseOnClickListener(-1));
         holder.btDelete.setOnClickListener(new deleteOnClickListener(expandedPosition, Integer.parseInt(holder.tvId.getText().toString())));
@@ -170,9 +164,10 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         holder.cbVibrate.setOnClickListener(new vibrateOnClickListener(alarm, position));
         holder.sActive.setOnClickListener(new activeOnClickListener(alarm, position));
 
-        System.out.println("position = " + position);
-        System.out.println("expandedPosition = "+ expandedPosition);
+//        System.out.println("position = " + position);
+//        System.out.println("expandedPosition = "+ expandedPosition);
 
+//        Set visibility of each elements
         if (holder.cbRepeat.isChecked()) {
             holder.llRepeatDays.setVisibility(View.VISIBLE);
         } else {
@@ -209,7 +204,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         }
     }
 
-
+//  Listener functions :
     public class deleteOnClickListener implements View.OnClickListener {
         int position;
         int id;
@@ -404,6 +399,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         return alarms.size();
     }
 
+//    Function to add alarm in the db and in the adapter
     public void addAlarm(String time, boolean popToast) {
         int id;
         if (dbHelper.getAlarms().size() == 0) {
@@ -438,6 +434,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         this.notifyItemInserted(position);
     }
 
+//    Remove an alarm from the adapter and the db
     public void removeAlarm(int position, int id) {
         dbHelper.deleteAlarm(id);
         alarms.remove(position);
@@ -447,6 +444,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         this.notifyItemChanged(expandedPosition);
     }
 
+//    Update an alarm from the adapter and the db
     public void updateAlarm(Alarm alarm, int position, boolean popToast) {
         dbHelper.updateAlarm(alarm);
         Alarm a = alarms.get(position);
@@ -465,6 +463,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         this.notifyItemChanged(position);
     }
 
+//    Launch the ringtone picker
     public void launchRingtonePicker(Alarm alarm, int position) {
         mSelectedAlarm = alarm;
         mSelectedPosition = position;
@@ -475,6 +474,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         activity.startActivityForResult(intent, 1);
     }
 
+//    Return of the ringtone picker form the main activity (onActivityResult)
     public void saveRingtoneUri(Intent intent) {
         Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
         Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
@@ -488,6 +488,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         updateAlarm(mSelectedAlarm, mSelectedPosition, false);
     }
 
+//    onClick on the alarm (open or not)
     @Override
     public void onClick(final View v) {
         SimpleViewHolder holder = (SimpleViewHolder) v.getTag();
@@ -539,6 +540,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     }
 }
 
+// ViewHolder to get every element of an alarm
 class SimpleViewHolder extends RecyclerView.ViewHolder
 {
     public GridLayout glAlarmItem;

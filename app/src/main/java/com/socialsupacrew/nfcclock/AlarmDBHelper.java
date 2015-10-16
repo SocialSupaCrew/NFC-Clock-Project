@@ -11,6 +11,8 @@ import java.util.ArrayList;
 /**
  * Created by SocialSupaCrew on 15/08/2015.
  */
+
+// Helper for my database
 public class AlarmDBHelper extends SQLiteOpenHelper {
     public final static String DB_NAME = "database.db";
     private static final int DB_VERSION = 7;
@@ -55,7 +57,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_DROP);
         onCreate(db);
     }
-
+//    CRUD function for alarms database
     public boolean insertAlarm(Alarm a) {
         String dayOfWeek = "";
         if (a.repeatDays.size() != 0) {
